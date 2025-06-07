@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-4-All Script Executor</title>
+</head>
+<body>
+    <h2>Enter your prompt:</h2>
+    <form id="prompt-form">
+        <input type="text" id="user-prompt" placeholder="Type your request..." required>
+        <button type="submit">Submit</button>
+    </form>
+    <p><strong>AI Response:</strong> <span id="ai-response"></span></p>
+    <p><strong>Script Execution:</strong> <span id="script-status"></span></p>
+
+    <script>
+        document.getElementById("prompt-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const prompt = document.getElementById("user-prompt").value;
+
+            const response = await fetch("/process-prompt", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: prompt })
+            });
+            const result = await response.json();
+            document.getElementById("ai-response").innerText = result.ai_response;
+            document.getElementById("script-status").innerText = result.script_executed ? "Executed ✅" : "Not Executed ❌";
+        });
+    </script>
+</body>
+</html>
